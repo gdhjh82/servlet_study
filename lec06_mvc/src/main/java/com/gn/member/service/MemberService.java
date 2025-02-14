@@ -1,12 +1,12 @@
 package com.gn.member.service;
 
+import static com.gn.common.sql.JDBCTemplate.close;
+import static com.gn.common.sql.JDBCTemplate.getConnection;
+
 import java.sql.Connection;
 
 import com.gn.member.dao.MemberDao;
 import com.gn.member.vo.Member;
-
-import static com.gn.common.sql.JDBCTemplate.getConnection;
-import static com.gn.common.sql.JDBCTemplate.close;
 public class MemberService {
 
 	// createMember 메소드
@@ -21,4 +21,18 @@ public class MemberService {
 			close(conn);
 			return result;
 		}
+		public Member loginMember(String id, String pw) {
+			Connection conn = getConnection();
+			Member result = dao.loginMember(id, pw, conn);
+			close(conn);
+			return result;
+			
+		}
+		public int updateMember(String pw, String name, String no){
+			Connection conn = getConnection();
+			int result = dao.updateMember(pw,name,no, conn);
+			close(conn);
+			return result;
+		}
+		
 }
