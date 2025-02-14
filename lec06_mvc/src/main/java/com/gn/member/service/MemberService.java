@@ -34,5 +34,11 @@ public class MemberService {
 			close(conn);
 			return result;
 		}
+		public Member getMemberByNo(String no) {
+			Connection conn = getConnection();
+			Member result = dao.getMemberByNo(no,conn);
+			close(conn);
+			return result;
+		}
 		
 }

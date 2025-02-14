@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 
@@ -33,6 +34,14 @@ public class MemberUpdateEndServlet extends HttpServlet {
 		obj.put("res_msg", "오류");
 		
 		if(result > 0) {
+			//Session 재설정
+			//1. member_no 정보를 기준으로 단일 회원 정보(Member)조회
+			//2. 새롭게 조회된 Member 정보를 Session에 재설정
+			Member m = new MemberService().getMemberByNo(no);
+			if(m != null){
+				HttpSession session = request.getSession();
+				session.setAttribute("member", m);
+			}
 			obj.put("res_cods", "200");
 			obj.put("res_msg", "수정됨");
 		}

@@ -45,6 +45,7 @@ public class MemberCreateEndServlet extends HttpServlet {
 		obj.put("res_cods", "500");
 		obj.put("res_msg", "회원가입중 오류가 발생하였습니다.");
 		
+
 		if(result > 0) {
 			obj.put("res_cods", "200");
 			obj.put("res_msg", "정상적으로 회원가입 되었습니다.");
