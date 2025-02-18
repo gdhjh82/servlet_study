@@ -12,16 +12,72 @@ import java.util.List;
 import com.gn.board.vo.Attach;
 import com.gn.board.vo.Board;
 public class BoardDao {
+	public Board selectBoardOne(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Board result = null;
+		try {
+			String sql="SELECT * FROM 'board' b JOIN `member` m ON b.board_writer = m.member_no WHERE board_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			rs = pstmt.executeQuery(); 
+			if(rs.next()) {
+				result = new Board();
+				result.setBoardTitle(rs.getString("board_title"));
+				result.setBoardContent(rs.getString("board_content"));
+				result.setBoardWriter(rs.getInt("board_writer"));
+				result.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+				result.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+				result.setMemberName(rs.getString("member_name"));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
 	
-	public List<Board> selectBoardList(Connection conn){
+	public int selectBoardCount(Connection conn, Board option) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM board ";
+			if(option.getBoardTitle() != null) {
+				sql += "WHERE board_title LIKE CONCAT('%','"+option.getBoardTitle()+"','%')";
+			}
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public List<Board> selectBoardList(Connection conn, Board option){
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Board> result = new ArrayList<>();
 		try {
-			String sql = "SELECT b.board_no, b.board_title, b.board_content, m.member_name, b.reg_date, b.mod_date "
-					+ "FROM member m "
-					+ "JOIN board b "
-					+ "ON b.board_writer = m.member_no";			
+			 String sql = "SELECT * "
+					+ "FROM board b "
+					+ "JOIN member m "
+					+ "ON b.board_writer = m.member_no ";
+		if(option.getBoardTitle() != null) {
+				sql += "WHERE board_title Like CONCAT('%','"+option.getBoardTitle()+"','%') ";
+		}
+		///추가///
+		sql += "LIMIT "+option.getLimitPageNo()+", "+option.getNumPerPage();
 		pstmt = conn.prepareStatement(sql);
 		rs = pstmt.executeQuery();
 		while(rs.next()) {

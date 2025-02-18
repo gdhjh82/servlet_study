@@ -23,10 +23,23 @@ public class BoardListServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Board> resultList = new BoardService().selectBoardList();
+		String boardTitle = request.getParameter("board_title");
+		String nowPage = request.getParameter("nowPage");
+		
+		Board option = new Board();
+		if(nowPage != null){
+			option.setNowPage(Integer.parseInt(nowPage));
+		}
+		option.setBoardTitle(boardTitle);
+		
+		int totalData = new BoardService().selectBoardCount(option);
+		option.setTotalData(totalData);
+		
+		List<Board> resultList = new BoardService().selectBoardList(option);
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/board/list.jsp");
 		request.setAttribute("resultList", resultList);
+		request.setAttribute("paging", option);
 		view.forward(request,response);
 	}
 
