@@ -12,7 +12,18 @@ public class Board extends Paging{
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 	private String memberName;
+	private int attachNo;
 	
+	
+	
+	public int getAttachNo() {
+		return attachNo;
+	}
+
+	public void setAttachNo(int attachNo) {
+		this.attachNo = attachNo;
+	}
+
 	public Board() {
 		super();
 	}
