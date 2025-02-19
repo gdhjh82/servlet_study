@@ -30,11 +30,12 @@
 						<table>
 							<tr>
 								<td>제목</td>
-								<td><%=board.getBoardTitle()%></td>
+								<td><%--<%=board.getBoardTitle()--%>${board.boardTitle}</td>
 							</tr>
 							<tr>
 								<td>내용</td>
-								<td><%=board.getBoardContent()%></td>
+								<%-- <td><%=board.getBoardContent()%></td> --%>
+								<td>${board.boardContent}</td>
 							</tr>
 							<tr>
 								<td>작성자</td>
