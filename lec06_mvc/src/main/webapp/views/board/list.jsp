@@ -55,6 +55,7 @@
 							</tr>		
 						<% } %> --%>
 						<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+						<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 						<%@page import="com.gn.board.vo.Board, java.util.*, java.time.format.*" %>
 						<%DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");%>
 						<c:forEach var="board" items="${resultList}" varStatus="vs">
@@ -62,7 +63,11 @@
 								<td>${(paging.nowPage-1)*paging.numPerPage+ vs.index + 1 }</td>
 								<td>${board.boardTitle }</td>
 								<td>${board.memberName }</td>
-								<td>${board.regDate }</td>
+								<%-- <td>${board.regDate }</td> --%>
+								<fmt:parseDate value="${b.regDate }" pattern="yyyy-MM-dd 'T' HH:mm:ss" var="strRegDate"/>
+								<td>
+									<fmt:formatDate value="${strRegDate }" pattern="yy-MM-dd HH:mm"/>
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -92,6 +97,10 @@
 		<div class="center">
 			<div class="pagination">
 				<c:if test="${paging.prev}">
+				<c:url>
+					<c:param name="nowPage" value="${paging.pageBarStart-1 }"></c:param>
+					<c:param name="board_title" value="${paging.boardTitle }"></c:param>
+				</c:url>
 				<a href="/boardList?nowPage=${paging.pageBarStart-1 }&board_title=${paging.boardTitle}">&laquo;</a>
 				</c:if>
 				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
