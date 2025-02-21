@@ -24,7 +24,8 @@ public class SqlSessionTemplate {
 			// 4. SqlSession 객체 생성
 			// 매개변수 -> AutoCommit 여부 지정 -> default : true
 			// AutoCommit 끌때 -> false
-			session = factory.openSession();
+			
+			session = factory.openSession(true);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
